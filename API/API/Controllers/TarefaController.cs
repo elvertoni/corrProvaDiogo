@@ -14,6 +14,54 @@ public class TarefaController : ControllerBase
     public TarefaController(AppDataContext context) =>
         _context = context;
 
+    // GET: api/tarefa/naoconcluidas
+    [HttpGet]
+    [Route("naoconcluidas")]
+    public IActionResult ListarNaoConcluidas()
+    {
+        try
+        {
+            List<Tarefa> tarefas = _context.
+                Tarefas.
+                Include(x => x.Categoria).
+                Where(x => x.Status != "Concluída").
+                ToList();
+
+            return Ok(tarefas);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    // GET: api/tarefa/concluidas
+    [HttpGet]
+    [Route("concluidas")]
+    public IActionResult ListarConcluidas()
+    {
+        try
+        {
+            List<Tarefa> tarefas = _context.Tarefas.Include(x => x.Categoria).ToList();
+            List<Tarefa> concluidas = new List<Tarefa>();
+
+            foreach (Tarefa tarefaCadastrada in tarefas)
+            {
+                if (tarefaCadastrada.Status == "Concluída")
+                {
+                  concluidas.Add(tarefaCadastrada);
+                }
+                
+            }
+
+            return Ok(concluidas);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
     // GET: api/tarefa/listar
     [HttpGet]
     [Route("listar")]
@@ -52,4 +100,22 @@ public class TarefaController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    [HttpPatch]
+    [Route("alterar/{id}")]
+    public IActionResult Alterar([FromRoute] int id)
+    {
+         Tarefa? tarefa = _context.Tarefas.Find(id);
+            if (tarefa == null)
+                return NotFound();
+            if (tarefa.Status == "Não iniciada")
+                tarefa.Status = "Em andamento";
+            else
+                tarefa.Status = "Concluída";
+
+                _context.Tarefas.Update(tarefa);
+                _context.SaveChanges();
+                return Ok(tarefa);
+    }
+
 }
