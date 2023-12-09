@@ -3,14 +3,26 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ListarTarefaComponent } from './pages/tarefa/listar-tarefa/listar-tarefa.component';
+import { ListarTarefaNaoConcluidaComponent } from './pages/tarefa/listar-tarefa-nao-concluida/listar-tarefa-nao-concluida.component';
+import { ListarTarefaConcluidaComponent } from './pages/tarefa/listar-tarefa-concluida/listar-tarefa-concluida.component';
+import { CadastrarTarefaComponent } from './pages/tarefa/cadastrar-tarefa/cadastrar-tarefa.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ListarTarefaComponent,
+    ListarTarefaNaoConcluidaComponent,
+    ListarTarefaConcluidaComponent,
+    CadastrarTarefaComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

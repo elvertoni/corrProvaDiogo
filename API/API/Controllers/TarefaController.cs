@@ -49,9 +49,9 @@ public class TarefaController : ControllerBase
             {
                 if (tarefaCadastrada.Status == "Concluída")
                 {
-                  concluidas.Add(tarefaCadastrada);
+                    concluidas.Add(tarefaCadastrada);
                 }
-                
+
             }
 
             return Ok(concluidas);
@@ -105,17 +105,17 @@ public class TarefaController : ControllerBase
     [Route("alterar/{id}")]
     public IActionResult Alterar([FromRoute] int id)
     {
-         Tarefa? tarefa = _context.Tarefas.Find(id);
-            if (tarefa == null)
-                return NotFound();
-            if (tarefa.Status == "Não iniciada")
-                tarefa.Status = "Em andamento";
-            else
-                tarefa.Status = "Concluída";
+        Tarefa? tarefa = _context.Tarefas.Find(id);
+        if (tarefa == null)
+            return NotFound();
+        if (tarefa.Status == "Não iniciada")
+            tarefa.Status = "Em andamento";
+        else
+            tarefa.Status = "Concluída";
 
-                _context.Tarefas.Update(tarefa);
-                _context.SaveChanges();
-                return Ok(tarefa);
+        _context.Tarefas.Update(tarefa);
+        _context.SaveChanges();
+        return Ok(_context.Tarefas.Include(x => x.Categoria).ToList());
     }
 
 }
